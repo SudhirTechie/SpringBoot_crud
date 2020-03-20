@@ -3,6 +3,7 @@ package com.sudhir.market.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			Employee employeeData = new Employee();
 			employeeData.setEmployeeName(employee.getEmployeeName());
 			//employeeData.setEmployeeId(IdGenerator.getId(employee.getEmployeeName(), employee.getPassword()));
-			employeeData.setPassword(employee.getPassword());
+			employeeData.setPassword(hashPassword(employee.getPassword()));
 			employeeData.setDesignation(employee.getDesignation());
 			employeeData.setSalary(employee.getSalary());
 			employeeData.setEmail(employee.getEmail());
@@ -69,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			Employee employeeData = employees.get();
 			employeeData.setEmployeeName(employee.getEmployeeName());
 			//employeeData.setEmployeeId(IdGenerator.getId(employee.getEmployeeName(), employee.getPassword()));
-			employeeData.setPassword(employee.getPassword());
+			employeeData.setPassword(hashPassword(employee.getPassword()));
 			employeeData.setDesignation(employee.getDesignation());
 			employeeData.setSalary(employee.getSalary());
 			employeeData.setEmail(employee.getEmail());
@@ -81,9 +82,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employee;
 	}
 
-	/*
-	 * @Bean public PasswordEncoder passwordEncoder(){ PasswordEncoder encoder = new
-	 * BCryptPasswordEncoder(); return encoder; }
-	 */
+	private String hashPassword(String plainTextPassword){
+		return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+	}
 
 }
